@@ -1,8 +1,8 @@
 package com.example.ReviewApp.controller;
 
-import com.example.ReviewApp.model.Ratings;
+import com.example.ReviewApp.model.Rating;
 import com.example.ReviewApp.model.User;
-import com.example.ReviewApp.repository.RatingRespository;
+import com.example.ReviewApp.repository.RatingFilterRespository;
 import com.example.ReviewApp.repository.UserRepository;
 import com.example.ReviewApp.userlogin.ApiResponse;
 import com.example.ReviewApp.userlogin.RatingRequest;
@@ -17,38 +17,35 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-
 @RestController
-@RequestMapping("/api/auth/ratings")
+@RequestMapping ("/api")
 public class RatingController {
     @Autowired
-    private   RatingRespository ratingRespository;
+    private RatingFilterRespository ratingFilterRespository;
 
     @Autowired
     private UserRepository userRepository;
 
-
-    @PostMapping("/insertReview")
-    public ResponseEntity<Ratings> create(@RequestBody @Valid RatingRequest ratingRequest) {
-        Ratings r = new Ratings();
-        r.setAmbiance(ratingRequest.getAmbiance());
-        r.setAmbiance(ratingRequest.getFood());
-        r.setCleanliness(ratingRequest.getCleanliness());
-        r.setService(ratingRequest.getService());
-        r.setDrinks(ratingRequest.getDrinks());
+    // @PreAuthorize("hasRole('USER')")
+    @PostMapping ("/rating")
+    public ResponseEntity<?> storeRating(@RequestBody RatingRequest ratingRequest) {
+        Rating rating = new Rating();
+        rating.setAmbiance(ratingRequest.getAmbiance());
+        rating.setFood(ratingRequest.getFood());
+        rating.setService(ratingRequest.getService());
+        rating.setCleanliness(ratingRequest.getCleanliness());
+        rating.setDrinks(ratingRequest.getDrinks());
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
         User user = userRepository.findByEmail(email).orElseThrow(() ->
                 new UsernameNotFoundException("User not found with email : " + email));
-        r.setUser(user);
 
-        ratingRespository.save(r);
-        return new ResponseEntity(new ApiResponse(true, "Users rating added"), HttpStatus.CREATED);
+        rating.setUser(user);
 
+        ratingFilterRespository.save(rating);
 
+        return new ResponseEntity<>(new ApiResponse( true,"Thanks for rating"), HttpStatus.CREATED);
     }
-
 }

@@ -4,13 +4,13 @@ import com.example.ReviewApp.exception.AppException;
 import com.example.ReviewApp.model.Role;
 import com.example.ReviewApp.model.RoleName;
 import com.example.ReviewApp.model.User;
+import com.example.ReviewApp.repository.RoleRepository;
+import com.example.ReviewApp.repository.UserRepository;
+import com.example.ReviewApp.security.JwtTokenProvider;
 import com.example.ReviewApp.userlogin.ApiResponse;
 import com.example.ReviewApp.userlogin.JwtAuthenticationResponse;
 import com.example.ReviewApp.userlogin.LoginRequest;
 import com.example.ReviewApp.userlogin.SignUpRequest;
-import com.example.ReviewApp.repository.RoleRepository;
-import com.example.ReviewApp.repository.UserRepository;
-import com.example.ReviewApp.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +23,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.Collections;
+
+/*
+APIs for login and signup
+ */
 
 @RestController
 @RequestMapping("/api/auth")
@@ -48,7 +50,7 @@ public class AuthController {
     @Autowired
     JwtTokenProvider tokenProvider;
 
-    @PostMapping("/signin")//login
+    @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -64,16 +66,15 @@ public class AuthController {
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
-    @PostMapping("/signup")//registered
+    @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
 
-
-        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        // Creating user's account //seting
+        // Creating user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(), signUpRequest.getPassword());
 
@@ -86,6 +87,6 @@ public class AuthController {
 
         User result = userRepository.save(user);
 
-        return new ResponseEntity(new ApiResponse(true, "User registered successfully"),HttpStatus.CREATED);
+        return new ResponseEntity(new ApiResponse(true,"User registered successfully"),HttpStatus.CREATED);
     }
 }

@@ -12,47 +12,47 @@ public class RatingRequest {
     @NotBlank
     private  int service;
     @NotBlank
-    private int cleanliness;
+    private int  cleanliness;
     @NotBlank
-    private  int drinks ;
+    private  int  drinks ;
 
     public int getAmbiance() {
         return ambiance;
     }
 
-    public void setAmbiance(int ambiance) {
-        this.ambiance = ambiance;
+    public void setAmbiance(String ambiance) {
+        this.ambiance = Integer.parseInt(ambiance);
     }
 
     public int getFood() {
         return food;
     }
 
-    public void setFood(int food) {
-        this.food = food;
+    public void setFood(String food) {
+        this.food = Integer.parseInt(food);
     }
 
     public int getService() {
         return service;
     }
 
-    public void setService(int service) {
-        this.service = service;
+    public void setService(String service) {
+        this.service = Integer.parseInt(service);
     }
 
     public int getCleanliness() {
         return cleanliness;
     }
 
-    public void setCleanliness(int cleanliness) {
-        this.cleanliness = cleanliness;
+    public void setCleanliness(String cleanliness) {
+        this.cleanliness = Integer.parseInt(cleanliness);
     }
 
     public int getDrinks() {
         return drinks;
     }
 
-    public void setDrinks(int drinks) {
-        this.drinks = drinks;
+    public void setDrinks(String drinks) {
+        this.drinks = Integer.parseInt(drinks);
     }
 }
