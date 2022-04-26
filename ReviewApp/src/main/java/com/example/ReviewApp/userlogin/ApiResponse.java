@@ -1,27 +1,40 @@
 package com.example.ReviewApp.userlogin;
 
 public class ApiResponse {
-    private Boolean success;
-    private String message;
+    private Object data;
+    private Object error;
 
-    public ApiResponse(boolean success, String message) {
-        this.success = success;
-        this.message = message;
+    public ApiResponse(Object data, Object error) {
+        this.data = data;
+        this.error = error;
     }
 
-    public Boolean getSuccess() {
-        return success;
+    public ApiResponse(Object error) {
+        this.error = error;
     }
 
-    public void setSuccess(Boolean success) {
-        this.success = success;
+    public Object getData() {
+        return data;
     }
 
-    public String getMessage() {
-        return message;
+    public void setData(Object data) {
+        this.data = data;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public Object getError() {
+        return error;
+    }
+
+    public void setError(Object error) {
+        this.error = error;
+    }
+
+    @Override
+    public String
+    toString() {
+        return "ApiResponse{" +
+                "data=" + data +
+                ", error=" + error +
+                '}';
     }
 }

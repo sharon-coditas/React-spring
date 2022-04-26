@@ -3,7 +3,9 @@ package com.example.ReviewApp.controller;
 
 import com.example.ReviewApp.repository.AverageRespository;
 import com.example.ReviewApp.repository.RatingFilterRespository;
+import com.example.ReviewApp.userlogin.ApiResponse;
 import com.example.ReviewApp.userlogin.AverageResponse;
+import com.example.ReviewApp.userlogin.ErrorResponse;
 import com.example.ReviewApp.userlogin.FilterResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -27,6 +29,9 @@ public class AdminController {
     @Autowired
     RatingFilterRespository ratingFilterRespository;
 
+    @Autowired
+    AverageRespository averageRespository;
+
     @GetMapping("/adminfilterpage")
     public ResponseEntity<?> findRating(@RequestParam(name = "ambiance", defaultValue = "0") String ambiance,
                                         @RequestParam(name = "food", defaultValue = "0") String food,
@@ -40,25 +45,16 @@ public class AdminController {
                 Integer.parseInt(service),
                 Integer.parseInt(drinks),
                 Integer.parseInt(cleanliness));
-        return ResponseEntity.ok(n);
+        return ResponseEntity.ok(new ApiResponse(n,new ErrorResponse("null")));
 
 
     }
-
-    @Autowired
-    AverageRespository averageRespository;
-
     @GetMapping("/adminform")
-    public ResponseEntity<?> findReport() {
-        Double ambiance = averageRespository.avgAmbiance();
-        Double cleanliness = averageRespository.avgCleanliness();
-        Double drinks = averageRespository.avgDrinks();
-        Double food = averageRespository.avgFood();
-        Double service = averageRespository.avgService();
-        Double totalAverage = (ambiance + cleanliness + drinks + food + service/5 );
+    public ResponseEntity<?> avgOfRatings() {
 
-        return ResponseEntity.ok(new AverageResponse(ambiance,cleanliness,drinks,food,service,totalAverage));
+        AverageResponse totalAverage  = averageRespository.totalAverages();
 
+        return ResponseEntity.ok(new ApiResponse(totalAverage,null));
     }
 }
 

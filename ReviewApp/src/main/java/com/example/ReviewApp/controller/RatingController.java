@@ -5,6 +5,7 @@ import com.example.ReviewApp.model.User;
 import com.example.ReviewApp.repository.RatingFilterRespository;
 import com.example.ReviewApp.repository.UserRepository;
 import com.example.ReviewApp.userlogin.ApiResponse;
+import com.example.ReviewApp.userlogin.ErrorResponse;
 import com.example.ReviewApp.userlogin.RatingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,6 @@ public class RatingController {
 
         ratingFilterRespository.save(rating);
 
-        return new ResponseEntity<>(new ApiResponse( true,"Thanks for rating"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse( new ErrorResponse("Thanks for rating"),null), HttpStatus.CREATED);
     }
 }
